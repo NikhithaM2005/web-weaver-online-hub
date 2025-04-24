@@ -15,16 +15,18 @@ import { OrderBill } from "@/components/bill/OrderBill";
 import { CartItem } from "@/types/database";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
+import { SpinnerDiscount } from "@/components/discount/SpinnerDiscount";
 
 export default function Cart() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showBill, setShowBill] = useState(false);
   const [orderItems, setOrderItems] = useState<CartItem[]>([]);
+  const [isSpinnerActive, setIsSpinnerActive] = useState(false);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
   const { user } = useAuth();
   const { cartItems, totalItems, totalAmount, removeFromCart, updateQuantity, clearCart, loading } = useCart();
   const { toast: uiToast } = useToast();
 
-  // Redirect to login if not authenticated
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
@@ -71,7 +73,22 @@ export default function Cart() {
     setOrderItems([]);
   };
 
-  // Calculate tax and final total
+  const handleProceedToCheckout = () => {
+    setIsSpinnerActive(true);
+  };
+
+  const handleDiscountApply = (discount: number) => {
+    setDiscountPercentage(discount);
+    setShowBill(true);
+    setShowSuccessModal(true);
+    clearCart();
+    uiToast({
+      title: "Discount applied successfully",
+      description: `${discount}% discount has been applied to your order!`,
+      variant: "default"
+    });
+  };
+
   const tax = totalAmount * 0.05;
   const finalTotal = totalAmount + tax;
 
@@ -215,9 +232,9 @@ export default function Cart() {
                         
                         <Button 
                           className="w-full"
-                          onClick={handleOrderSuccess}
+                          onClick={handleProceedToCheckout}
                         >
-                          Place Order
+                          Proceed to Checkout
                         </Button>
                       </div>
                     </div>
@@ -225,7 +242,11 @@ export default function Cart() {
                 </>
               ) : (
                 <div className="lg:col-span-3">
-                  <OrderBill items={orderItems} onClose={handleCloseBill} />
+                  <OrderBill 
+                    items={orderItems} 
+                    discountPercentage={discountPercentage}
+                    onClose={handleCloseBill} 
+                  />
                 </div>
               )}
             </div>
@@ -234,6 +255,9 @@ export default function Cart() {
       </main>
       <Footer />
       <OrderSuccessModal isOpen={showSuccessModal} onClose={handleCloseModal} />
+      {isSpinnerActive && !showBill && (
+        <SpinnerDiscount onDiscountApply={handleDiscountApply} />
+      )}
     </>
   );
 }

@@ -1,4 +1,3 @@
-
 export interface SubscriptionPlan {
   id: string;
   name: string;
@@ -19,4 +18,14 @@ export interface Subscription {
   canceled_at: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface OrderSummary {
+  subtotal: number;
+  tax: number;
+  discount: {
+    percentage: number;
+    amount: number;
+  };
+  total: number;
 }

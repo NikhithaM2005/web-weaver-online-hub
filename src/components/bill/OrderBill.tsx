@@ -6,16 +6,18 @@ import { X, Printer } from "lucide-react";
 
 interface OrderBillProps {
   items: CartItem[];
+  discountPercentage?: number;
   onClose: () => void;
 }
 
-export function OrderBill({ items, onClose }: OrderBillProps) {
+export function OrderBill({ items, discountPercentage = 0, onClose }: OrderBillProps) {
   const subtotal = items.reduce((total, item) => 
     total + (item.menu_item?.price || 0) * item.quantity, 
     0
   );
   const tax = subtotal * 0.05; // 5% tax
-  const total = subtotal + tax;
+  const discountAmount = (subtotal + tax) * (discountPercentage / 100);
+  const total = subtotal + tax - discountAmount;
 
   const handlePrint = () => {
     window.print();
@@ -51,6 +53,12 @@ export function OrderBill({ items, onClose }: OrderBillProps) {
               <span className="text-muted-foreground">Tax (5%)</span>
               <span>₹{tax.toFixed(0)}</span>
             </div>
+            {discountPercentage > 0 && (
+              <div className="flex justify-between text-green-600">
+                <span>Discount ({discountPercentage}%)</span>
+                <span>-₹{discountAmount.toFixed(0)}</span>
+              </div>
+            )}
             <div className="flex justify-between font-medium text-lg pt-2 border-t">
               <span>Total</span>
               <span>₹{total.toFixed(0)}</span>
