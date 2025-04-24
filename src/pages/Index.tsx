@@ -14,11 +14,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
 import { adaptMenuItemToDatabase } from "@/lib/menu-adapters";
+import { useState } from "react";
+import { SpinnerDiscount } from "@/components/discount/SpinnerDiscount";
 
 export default function Index() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const [isSpinnerActive, setIsSpinnerActive] = useState(false);
   
   const popularItems = menuItems
     .filter((item) => item.popular)
@@ -55,6 +58,11 @@ export default function Index() {
       console.error("Error adding to cart:", error);
       toast.error("There was an error adding this item to your cart");
     }
+  };
+
+  const handleSpinnerApply = (discount: number) => {
+    toast.success(`${discount}% discount has been applied to your order!`);
+    navigate("/cart");
   };
   
   return (
@@ -195,6 +203,9 @@ export default function Index() {
           </div>
         </section>
       </main>
+      {isSpinnerActive && (
+        <SpinnerDiscount onDiscountApply={handleSpinnerApply} />
+      )}
       <Footer />
     </>
   );
