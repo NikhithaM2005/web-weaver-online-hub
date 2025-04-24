@@ -78,15 +78,8 @@ export default function Cart() {
   };
 
   const handleDiscountApply = (discount: number) => {
-    setDiscountPercentage(discount);
-    setShowBill(true);
+    toast.success(`${discount}% discount has been applied to your order!`);
     setShowSuccessModal(true);
-    clearCart();
-    uiToast({
-      title: "Discount applied successfully",
-      description: `${discount}% discount has been applied to your order!`,
-      variant: "default"
-    });
   };
 
   const tax = totalAmount * 0.05;
