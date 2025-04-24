@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 import { OrderSuccessModal } from "@/components/modals/OrderSuccessModal";
 import { OrderBill } from "@/components/bill/OrderBill";
 import { CartItem } from "@/types/database";
+import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function Cart() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -20,6 +22,7 @@ export default function Cart() {
   const [orderItems, setOrderItems] = useState<CartItem[]>([]);
   const { user } = useAuth();
   const { cartItems, totalItems, totalAmount, removeFromCart, updateQuantity, clearCart, loading } = useCart();
+  const { toast: uiToast } = useToast();
 
   // Redirect to login if not authenticated
   if (!user) {
@@ -36,10 +39,15 @@ export default function Cart() {
   
   const handleRemoveItem = (cartItemId: string) => {
     removeFromCart(cartItemId);
+    uiToast({
+      title: "Item removed",
+      description: "The item has been removed from your cart"
+    });
   };
   
   const handleClearCart = () => {
     clearCart();
+    toast.success("Your cart has been cleared");
   };
 
   const handleOrderSuccess = () => {
@@ -47,6 +55,11 @@ export default function Cart() {
     setShowSuccessModal(true);
     setShowBill(true);
     clearCart();
+    uiToast({
+      title: "Order placed successfully",
+      description: "Thank you for your order!",
+      variant: "default"
+    });
   };
 
   const handleCloseModal = () => {
