@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,6 +13,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { FoodCategoriesSection } from "@/components/home/FoodCategoriesSection";
 import { PopularItemsSection } from "@/components/home/PopularItemsSection";
 import { CtaSection } from "@/components/home/CtaSection";
+import { MenuItem } from "@/types/database";
 
 export default function Index() {
   const navigate = useNavigate();
