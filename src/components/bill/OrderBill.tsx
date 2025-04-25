@@ -24,10 +24,10 @@ export function OrderBill({ items, discountPercentage = 0, onClose }: OrderBillP
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto my-8 bg-white/5 backdrop-blur-lg border-orange-500/20">
-      <CardHeader className="border-b border-orange-500/20 flex flex-row justify-between items-center">
+    <Card className="w-full max-w-2xl mx-auto my-8 bg-white/5 backdrop-blur-lg border-orange-500/20 print:shadow-none print:border-none">
+      <CardHeader className="border-b border-orange-500/20 flex flex-row justify-between items-center print:border-none">
         <h2 className="text-2xl font-semibold">Order Summary</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
+        <Button variant="ghost" size="icon" onClick={onClose} className="print:hidden">
           <X className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -66,7 +66,7 @@ export function OrderBill({ items, discountPercentage = 0, onClose }: OrderBillP
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end space-x-2 pt-6">
+      <CardFooter className="flex justify-end space-x-2 pt-6 print:hidden">
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
           Print Bill
