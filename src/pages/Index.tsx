@@ -13,7 +13,8 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { FoodCategoriesSection } from "@/components/home/FoodCategoriesSection";
 import { PopularItemsSection } from "@/components/home/PopularItemsSection";
 import { CtaSection } from "@/components/home/CtaSection";
-import { MenuItem } from "@/types/database";
+import type { MenuItem as DatabaseMenuItem } from "@/types/database";
+import type { MenuItem as MenuDataItem } from "@/lib/menu-data";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -22,19 +23,22 @@ export default function Index() {
   const [isSpinnerActive, setIsSpinnerActive] = useState(false);
   
   const popularItems = menuItems
-    .filter((item) => item.popular)
+    .filter((item: MenuDataItem) => item.popular)
     .slice(0, 4)
-    .map(item => adaptMenuItemToDatabase({
-      ...item,
-      id: uuidv4(),
-      price: item.price * 82,
-    }));
+    .map(item => ({
+      ...adaptMenuItemToDatabase({
+        ...item,
+        id: uuidv4(),
+        price: item.price * 82,
+      }),
+      category: item.category,
+    })) as MenuDataItem[];
 
   const handleViewMenu = () => {
     navigate("/menu");
   };
 
-  const handleAddToCart = async (e: React.MouseEvent, item: MenuItem) => {
+  const handleAddToCart = async (e: React.MouseEvent, item: DatabaseMenuItem) => {
     e.stopPropagation();
     
     if (!user) {
