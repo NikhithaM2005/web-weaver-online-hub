@@ -11,16 +11,9 @@ interface SpinnerDiscountProps {
 }
 
 export function SpinnerDiscount({ onDiscountApply }: SpinnerDiscountProps) {
-  const [isActive, setIsActive] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [showLargeSpinner, setShowLargeSpinner] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState<number | null>(null);
   
-  const handleSpinnerClick = () => {
-    if (!isActive) return;
-    setShowLargeSpinner(true);
-  };
-
   const handleSpin = () => {
     if (isSpinning) return;
     
@@ -40,24 +33,6 @@ export function SpinnerDiscount({ onDiscountApply }: SpinnerDiscountProps) {
       onDiscountApply(selectedDiscount);
     }
   };
-
-  if (!showLargeSpinner) {
-    return (
-      <div className="fixed bottom-4 right-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "h-12 w-12 rounded-full",
-            isActive ? "text-amber-600 hover:text-amber-700" : "text-gray-300"
-          )}
-          onClick={handleSpinnerClick}
-        >
-          <Loader className={cn("h-6 w-6", isActive && "animate-spin")} />
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -91,13 +66,6 @@ export function SpinnerDiscount({ onDiscountApply }: SpinnerDiscountProps) {
               {isSpinning ? "Spinning..." : "SPIN"}
             </Button>
           )}
-          
-          <button
-            className="mt-4 text-sm text-gray-500 hover:text-gray-700"
-            onClick={() => setShowLargeSpinner(false)}
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>

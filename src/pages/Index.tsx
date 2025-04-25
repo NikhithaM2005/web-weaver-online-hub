@@ -24,15 +24,12 @@ export default function Index() {
   const popularItems = menuItems
     .filter((item) => item.popular)
     .slice(0, 4)
-    .map(item => ({
+    .map(item => adaptMenuItemToDatabase({
       ...item,
       id: uuidv4(),
       price: item.price * 82,
-      category_id: item.category,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
     }));
-  
+
   const handleViewMenu = () => {
     navigate("/menu");
   };
@@ -65,7 +62,7 @@ export default function Index() {
     toast.success(`${discount}% discount has been applied to your order!`);
     navigate("/cart");
   };
-  
+
   return (
     <>
       <Header />

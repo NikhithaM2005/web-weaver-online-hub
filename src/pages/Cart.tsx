@@ -78,6 +78,7 @@ export default function Cart() {
   };
 
   const handleDiscountApply = (discount: number) => {
+    setDiscountPercentage(discount);
     toast.success(`${discount}% discount has been applied to your order!`);
     setShowSuccessModal(true);
   };
