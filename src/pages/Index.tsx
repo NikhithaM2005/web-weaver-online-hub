@@ -27,7 +27,10 @@ export default function Index() {
     .map(item => ({
       ...item,
       id: uuidv4(),
-      price: item.price * 82
+      price: item.price * 82,
+      category_id: item.category,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }));
   
   const handleViewMenu = () => {

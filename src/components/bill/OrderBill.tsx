@@ -16,8 +16,8 @@ export function OrderBill({ items, discountPercentage = 0, onClose }: OrderBillP
     0
   );
   const tax = subtotal * 0.05; // 5% tax
-  const discountAmount = (subtotal + tax) * (discountPercentage / 100);
-  const total = subtotal + tax - discountAmount;
+  const discountAmount = (subtotal + tax) * (discountPercentage / 100); // Calculate discount after tax
+  const total = subtotal + tax - discountAmount; // Total after discount
 
   const handlePrint = () => {
     window.print();
